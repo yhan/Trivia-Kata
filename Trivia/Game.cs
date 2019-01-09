@@ -11,17 +11,17 @@ namespace UglyTrivia
 
         List<string> players = new List<string>();
 
-        int[] places = new int[6];
-        int[] purses = new int[6];
+        public int[] places = new int[6];
+        public int[] purses = new int[6];
 
-        bool[] inPenaltyBox = new bool[6];
+        public bool[] inPenaltyBox = new bool[6];
 
-        LinkedList<string> popQuestions = new LinkedList<string>();
-        LinkedList<string> scienceQuestions = new LinkedList<string>();
-        LinkedList<string> sportsQuestions = new LinkedList<string>();
-        LinkedList<string> rockQuestions = new LinkedList<string>();
+        public LinkedList<string> popQuestions { get; } = new LinkedList<string>();
+        public LinkedList<string> scienceQuestions { get; } = new LinkedList<string>();
+        public LinkedList<string> sportsQuestions { get; } = new LinkedList<string>();
+        public LinkedList<string> rockQuestions { get; } = new LinkedList<string>();
 
-        int currentPlayer = 0;
+        public int currentPlayer { get; set; }
         bool isGettingOutOfPenaltyBox;
 
         public Game()
@@ -47,8 +47,6 @@ namespace UglyTrivia
 
         public bool add(String playerName)
         {
-
-
             players.Add(playerName);
             places[howManyPlayers()] = 0;
             purses[howManyPlayers()] = 0;
@@ -132,7 +130,7 @@ namespace UglyTrivia
         }
 
 
-        private String currentCategory()
+        public String currentCategory()
         {
             if (places[currentPlayer] == 0) return "Pop";
             if (places[currentPlayer] == 4) return "Pop";
