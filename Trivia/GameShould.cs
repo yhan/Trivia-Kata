@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NFluent;
+﻿using NFluent;
 
 namespace Trivia
 {
@@ -28,7 +24,7 @@ namespace Trivia
             Game aGame = new Game();
             aGame.add("Chet");
             aGame.roll(roll);
-            Check.That(aGame.places[aGame.currentPlayer]).Equals(roll);
+            Check.That(aGame.players[aGame.currentPlayer].Place).Equals(roll);
         }
 
         [Test]
@@ -37,7 +33,7 @@ namespace Trivia
             Game aGame = new Game();
             aGame.add("Chet");
             aGame.roll(12);
-            Check.That(aGame.places[aGame.currentPlayer]).Equals(0);
+            Check.That(aGame.players[aGame.currentPlayer].Place).Equals(0);
         }
 
         [Test]
@@ -45,12 +41,12 @@ namespace Trivia
         {
             var rolls = new[] {0, 4, 4};
             Game aGame = new Game();
-            int initialValue = aGame.popQuestions.Count;
+            int initialValue = aGame.PopCategory.Questions.Count;
             aGame.add("Chet");
             foreach (var roll in rolls)
             {
                 aGame.roll(roll);
-                Check.That(aGame.popQuestions.Count).IsEqualTo(--initialValue);
+                Check.That(aGame.PopCategory.Questions.Count).IsEqualTo(--initialValue);
             }
         }
 
@@ -59,12 +55,12 @@ namespace Trivia
         {
             var rolls = new[] { 1, 4, 4 };
             Game aGame = new Game();
-            int initialValue = aGame.scienceQuestions.Count;
+            int initialValue = aGame.ScienceCategory.Questions.Count;
             aGame.add("Chet");
             foreach (var roll in rolls)
             {
                 aGame.roll(roll);
-                Check.That(aGame.scienceQuestions.Count).IsEqualTo(--initialValue);
+                Check.That(aGame.ScienceCategory.Questions.Count).IsEqualTo(--initialValue);
             }
         }
 
@@ -73,12 +69,12 @@ namespace Trivia
         {
             var rolls = new[] { 2, 4, 4 };
             Game aGame = new Game();
-            int initialValue = aGame.sportsQuestions.Count;
+            int initialValue = aGame.SportsCategory.Questions.Count;
             aGame.add("Chet");
             foreach (var roll in rolls)
             {
                 aGame.roll(roll);
-                Check.That(aGame.sportsQuestions.Count).IsEqualTo(--initialValue);
+                Check.That(aGame.SportsCategory.Questions.Count).IsEqualTo(--initialValue);
             }
         }
 
@@ -87,12 +83,12 @@ namespace Trivia
         {
             var rolls = new[] { 11 };
             Game aGame = new Game();
-            int initialValue = aGame.rockQuestions.Count;
+            int initialValue = aGame.RockCategory.Questions.Count;
             aGame.add("Chet");
             foreach (var roll in rolls)
             {
                 aGame.roll(roll);
-                Check.That(aGame.rockQuestions.Count).IsEqualTo(--initialValue);
+                Check.That(aGame.RockCategory.Questions.Count).IsEqualTo(--initialValue);
             }
         }
 
@@ -106,7 +102,7 @@ namespace Trivia
             {
                 aGame.roll(1);
                 aGame.wasCorrectlyAnswered();
-                Check.That(aGame.purses[aGame.currentPlayer]).IsEqualTo(++purse);
+                Check.That(aGame.players[aGame.currentPlayer].Purse).IsEqualTo(++purse);
             }
         }
 
@@ -118,7 +114,7 @@ namespace Trivia
             aGame.add("Chet");
             aGame.roll(1);
             aGame.wrongAnswer();
-            Check.That(aGame.inPenaltyBox[aGame.currentPlayer]).IsEqualTo(true);
+            Check.That(aGame.players[aGame.currentPlayer].InPenaltyBox).IsEqualTo(true);
         }
 
         [Test]
@@ -130,12 +126,12 @@ namespace Trivia
             {
                 aGame.roll(1);
                 aGame.wrongAnswer();
-                Check.That(aGame.purses[aGame.currentPlayer]).IsEqualTo(0);
+                Check.That(aGame.players[aGame.currentPlayer].Purse).IsEqualTo(0);
             }
         }
 
         [Test]
-        public void Reamin_in_penality_box_When_was_in_penality_box_and_answer_correctly()
+        public void Remain_in_penality_box_When_was_in_penality_box_and_answer_correctly()
         {
             Game aGame = new Game();
             aGame.add("Chet");
@@ -144,8 +140,38 @@ namespace Trivia
             {
                 aGame.roll(1);
                 aGame.wasCorrectlyAnswered();
-                Check.That(aGame.inPenaltyBox[aGame.currentPlayer]).IsEqualTo(true);
+                Check.That(aGame.players[aGame.currentPlayer].InPenaltyBox).IsEqualTo(true);
             }
+        }
+
+        [Test]
+        public void Remain_penality_box_When_roll_2_and_was_in_penality_box_and_answer_correctly()
+        {
+            Game aGame = new Game();
+            aGame.add("Chet");
+            aGame.wrongAnswer();
+            aGame.roll(2);
+            aGame.wasCorrectlyAnswered();
+            Check.That(aGame.players[aGame.currentPlayer].InPenaltyBox).IsEqualTo(true);
+        }
+
+        [Test]
+        public void Win_When_answer_6_question_correctly()
+        {
+            Game aGame = new Game();
+            aGame.add("Chet");
+            aGame.roll(1);
+            Check.That(aGame.wasCorrectlyAnswered()).IsEqualTo(true);
+            aGame.roll(1);
+            Check.That(aGame.wasCorrectlyAnswered()).IsEqualTo(true);
+            aGame.roll(1);
+            Check.That(aGame.wasCorrectlyAnswered()).IsEqualTo(true);
+            aGame.roll(1);
+            Check.That(aGame.wasCorrectlyAnswered()).IsEqualTo(true);
+            aGame.roll(1);
+            Check.That(aGame.wasCorrectlyAnswered()).IsEqualTo(true);
+            aGame.roll(1);
+            Check.That(aGame.wasCorrectlyAnswered()).IsEqualTo(false);
         }
     }
 }
